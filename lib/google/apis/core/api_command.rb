@@ -53,6 +53,8 @@ module Google
         # @return [void]
         def prepare!
           query[FIELDS_PARAM] = normalize_fields_param(query[FIELDS_PARAM]) if query.key?(FIELDS_PARAM)
+          puts "query"
+          puts query
           if request_representation && request_object
             header[:content_type] ||= JSON_CONTENT_TYPE
             self.body = request_representation.new(request_object).to_json(skip_undefined: true)
@@ -70,6 +72,8 @@ module Google
         #   Response object
         # noinspection RubyUnusedLocalVariable
         def decode_response_body(content_type, body)
+          puts "decode_response_body"
+          puts body
           return super unless response_representation
           return super if content_type.nil?
           return nil unless content_type.start_with?(JSON_CONTENT_TYPE)
@@ -93,6 +97,12 @@ module Google
         # @raise [Google::Apis::ClientError] The request is invalid and should not be retried without modification
         # @raise [Google::Apis::AuthorizationError] Authorization is required
         def check_status(status, header = nil, body = nil, message = nil)
+          puts "check_status"
+          puts status.inspect
+          puts "body"
+          puts body.inspect
+          puts "message"
+          puts message
           case status
           when 400, 402...500
             error = parse_error(body)

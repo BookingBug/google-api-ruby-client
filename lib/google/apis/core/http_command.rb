@@ -281,6 +281,9 @@ module Google
               # End workaround
               apply_request_options(req)
             end
+            puts "execute_once"
+            puts "response.inspect"
+            puts response.inspect
             logger.debug { response.status_code }
             logger.debug { response.inspect }
             response = process_response(response.status_code, response.header, response.body)
