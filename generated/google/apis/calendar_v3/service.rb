@@ -1399,13 +1399,17 @@ module Google
         # @raise [Google::Apis::ServerError] An error occurred on the server and the request can be retried
         # @raise [Google::Apis::ClientError] The request is invalid and should not be retried without modification
         # @raise [Google::Apis::AuthorizationError] Authorization is required
-        def list_events(calendar_id, always_include_email: nil, i_cal_uid: nil, max_attendees: nil, max_results: nil, order_by: nil, page_token: nil, private_extended_property: nil, q: nil, shared_extended_property: nil, show_deleted: nil, show_hidden_invitations: nil, single_events: nil, sync_token: nil, time_max: nil, time_min: nil, time_zone: nil, updated_min: nil, fields: nil, quota_user: nil, user_ip: nil, options: nil, representer: nil, response_handler: nil, endpoint_override: nil, search_options: nil, &block)
-          command =  make_simple_command(:get, endpoint_override || 'calendars/{calendarId}/events', options)
+        def list_events(calendar_id, always_include_email: nil, i_cal_uid: nil, max_attendees: nil, max_results: nil, order_by: nil, page_token: nil, private_extended_property: nil, q: nil, shared_extended_property: nil, show_deleted: nil, show_hidden_invitations: nil, single_events: nil, sync_token: nil, time_max: nil, time_min: nil, time_zone: nil, updated_min: nil, fields: nil, quota_user: nil, user_ip: nil, options: nil, representer: nil, response_handler: nil, endpoint_override: nil, extra_query_params: [], &block)
+          command = make_simple_command(:get, endpoint_override || 'calendars/{calendarId}/events', options)
           command.response_representation = representer || Google::Apis::CalendarV3::Events::Representation
           command.response_class = response_handler || Google::Apis::CalendarV3::Events
 
           command.params['calendarId'] = calendar_id unless calendar_id.nil?
-          command.params['searchOptions'] = search_options unless search_options.nil?
+
+          extra_query_params.each do |key, value|
+            key = key.to_s.gsub(/_([a-z]{1})/){ |x| x.gsub("_", "").capitalize } # not having rails sucks
+            command.params[key] = value
+          end
 
           command.query['calendarId'] = calendar_id unless calendar_id.nil?
           command.query['alwaysIncludeEmail'] = always_include_email unless always_include_email.nil?
